@@ -13,6 +13,10 @@ mongoose.connect(dbConfig.DB_URL,
 
 require("./routes/ticketNotification.route")(app)
 
+app.get('/', (req, res) => {
+    res.status(200).send("<h2>Notification Service Running</h2>");
+  });
+
 app.listen(3030, () => {
     console.log("Notification service started on http://localhost:3030")
 })
