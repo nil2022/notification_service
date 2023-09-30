@@ -36,6 +36,6 @@ require("./routes/ticketNotification.route")(app)
 
 app.get('/', (req, res) => {
     const ip = userIP(req);
-    console.log("Client Request IP:",ip);
+    // console.log("Client Request IP:",ip);
     res.status(200).send(`<h2>Notification Service Running 🚀</h2>`);
   });
