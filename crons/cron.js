@@ -9,6 +9,7 @@ cron.schedule(process.env.CRON_SCHEDULE, async () => {   //RUNS EVERY specified 
             
             console.log(`Count of unsent notification: ${notifications.length}`)
 
+            
             if(notifications.length!=0){
                 for(let i=0;i<notifications.length;i++){
 
@@ -16,7 +17,8 @@ cron.schedule(process.env.CRON_SCHEDULE, async () => {   //RUNS EVERY specified 
                     <p>
                     <b>Hello '<i>${notifications[i].requester}</i>',</b>
                     </p>
-                            You have registered successfully with CRM Service
+                    <p>Content is - ${notifications[i].content}</p>
+                    You have registered successfully with CRM Service
                     <br/>
                     Thanks & Regards,
                     <p id="para1" style="margin-top: 5px; margin-bottom: 5px;"><strong>Book My Show</strong></p>
@@ -27,13 +29,14 @@ cron.schedule(process.env.CRON_SCHEDULE, async () => {   //RUNS EVERY specified 
                     </a>
                     </p>
                 </div>`
+    
                         notifications.forEach(notification => {
                             const mailData = {
                                 from: process.env.MAIL_FROM,
                                 reply_to: process.env.MAIL_REPLY_TO,
-                                to: process.env.MAIL_TO,
+                                to: notifications[i].receipientEmails,
                                 subject: notification.subject,
-                                text: notification.content,
+                                // text: notification.content,
                                 html: mailHtml
                             }
                             console.log({
@@ -50,9 +53,10 @@ cron.schedule(process.env.CRON_SCHEDULE, async () => {   //RUNS EVERY specified 
                                         MessageID:info.messageId,
                                         Response:[info.response]
                                     });
-                                    const savedNotification = await TicketNotificationModel
-                                        .findOne({ _id: notification._id })
+                                    const savedNotification = await TicketNotificationModel.findOne({ _id: notification._id })
+
                                     savedNotification.sentStatus = "SENT"
+
                                     await savedNotification.save()
                                 }
                             })
