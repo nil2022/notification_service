@@ -28,15 +28,11 @@ const ticketNotificationSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         immutable: true,
-        default: () => {
-            return Date.now()
-        }
+        default: Date.now()
     },
     updatedAt: {
         type: Date,
-        default: () => {
-            return Date.now()
-        }
+        default: Date.now()
     }
 })
 

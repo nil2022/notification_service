@@ -1,18 +1,37 @@
 {
   "name": "notification-service",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "the service to send notification to the users of crm app",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm install express mongoose node-cron nodemailer nodemon dotenv --save",
+    "start": "node ./app.js",
+    "dev": "nodemon ./app.js"
   },
   "author": "Nilanjan Haldar",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "mongoose": "^6.9.0",
+    "mongoose": "^7.5.3",
     "node-cron": "^3.0.2",
-    "nodemailer": "^6.9.1",
-    "nodemon": "^2.0.20"
-  }
+    "nodemailer": "^6.9.5",
+    "nodemon": "^2.0.22"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nil2022/notification_service.git"
+  },
+  "keywords": [
+    "express",
+    "mongoose",
+    "node-cron",
+    "nodemailer",
+    "nodemon",
+    "dotenv"
+  ],
+  "bugs": {
+    "url": "https://github.com/nil2022/notification_service/issues"
+  },
+  "homepage": "https://github.com/nil2022/notification_service#readme"
 }
