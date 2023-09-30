@@ -2,6 +2,7 @@ require('dotenv').config();
 require('./crons/cron')
 const mongoose = require('mongoose')
 const express = require('express')
+const userIP = require('user-ip');
 const app = express()
 const db_url = process.env.DB_URL
 
@@ -34,6 +35,7 @@ connectDB().then(() => {
 require("./routes/ticketNotification.route")(app)
 
 app.get('/', (req, res) => {
-    console.log(req);
+    const ip = userIP(req);
+    console.log("Client Request IP:",ip);
     res.status(200).send(`<h2>Notification Service Running 🚀</h2>`);
   });
