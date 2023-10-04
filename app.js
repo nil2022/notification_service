@@ -1,9 +1,9 @@
 require('dotenv').config();
-require('./crons/cron')
-const mongoose = require('mongoose')
-const express = require('express')
-const userIP = require('user-ip');
-const app = express()
+require('./crons/cron');
+const mongoose = require('mongoose');
+const express = require('express');
+const userIP = require('user-ip');;
+const app = express();
 const db_url = process.env.DB_URL
 
 app.use(express.urlencoded({extended:true}));

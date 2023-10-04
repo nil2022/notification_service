@@ -4,6 +4,7 @@ const TicketNotificationModel = require('../models/ticketNotification.model')
  * This controller adds a new unsent notification to our db
  */
 exports.acceptNotificationRequest = async (req, res) => {
+    
     const notificationObject = {
         subject: req.body.subject,
         content: req.body.content,
@@ -11,7 +12,6 @@ exports.acceptNotificationRequest = async (req, res) => {
         requester: req.body.requester,
         ticketId: req.body.ticketId,
     }
-
     try {
         const notification = await TicketNotificationModel.create(
             notificationObject

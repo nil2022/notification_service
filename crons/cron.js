@@ -7,8 +7,7 @@ cron.schedule(process.env.CRON_SCHEDULE, async () => {   //RUNS EVERY specified 
     
     const notifications = await TicketNotificationModel.find({ sentStatus: "UN_SENT" })
             
-            console.log(`Count of unsent notification: ${notifications.length}`)
-
+            console.log(`Count of Unsent notification: ${notifications.length}`)
             
             if(notifications.length!=0){
                 for(let i=0;i<notifications.length;i++){
@@ -39,29 +38,31 @@ cron.schedule(process.env.CRON_SCHEDULE, async () => {   //RUNS EVERY specified 
                                 // text: notification.content,
                                 html: mailHtml
                             }
-                            console.log({
-                                FROM:mailData.from,
-                                TO:mailData.to
-                            })
 
-                            EmailTransporter.sendMail(mailData, async (err, info) => {
-                                if (err) {
-                                    console.log("Mail Error:", err.name, err.message)
-                                } else {
-                                    console.log("Email Sent Successfully: ", {
-                                        Accepted:info.accepted,
-                                        MessageID:info.messageId,
-                                        Response:[info.response]
-                                    });
-                                    const savedNotification = await TicketNotificationModel.findOne({ _id: notification._id })
-
-                                    savedNotification.sentStatus = "SENT"
-
-                                    await savedNotification.save()
-                                }
-                            })
+                            try {
+                                EmailTransporter.sendMail(mailData, async (err, info) => {
+                                    if (err) {
+                                        console.log("Mail Error:", err.name, err.message)
+                                    } else {
+                                        console.log("Email Sent Successfully: ", {
+                                            Accepted:info.accepted,
+                                            MessageID:info.messageId,
+                                            Response:[info.response]
+                                        });
+                                        const savedNotification = await TicketNotificationModel.findOne({ _id: notification._id })
+    
+                                        savedNotification.sentStatus = "SENT"
+    
+                                        await savedNotification.save()
+                                    }
+                                })
+                            } catch (error) {
+                                console.log('Error:', error.message);
+                            }
+                            
+                            
                     })  
                 }
             }
-           
+            
 })

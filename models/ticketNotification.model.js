@@ -3,23 +3,22 @@ const mongoose = require("mongoose")
 const ticketNotificationSchema = new mongoose.Schema({
     subject: {
         type: String,
-        required: true,
+        required: [true,`Not provided`],
     },
     ticketId: {
         type: String,
-        required: true,
+        required: [true,`Not provided`]
     },
     content: {
         type: String,
-        required: true,
+        required: [true,`Not provided`],
     },
     receipientEmails: {
         type: [String],
-        required: true,
+        required: [true,`Not provided`],
     },
     sentStatus: {
         type: String,
-        required: true,
         default: "UN_SENT",
     },
     requester: {
