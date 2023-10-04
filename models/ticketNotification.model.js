@@ -32,7 +32,13 @@ const ticketNotificationSchema = new mongoose.Schema({
     updatedAt: {
         type: Date,
         default: Date.now()
-    }
+    },
+    //Expires in 180 seconds
+    expireAt: {
+        type: Date,
+        default: Date.now(),
+        expires: 180
+      }
 })
 
 module.exports = mongoose.model("TicketNotification", ticketNotificationSchema)
