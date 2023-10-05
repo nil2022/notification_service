@@ -33,11 +33,11 @@ const ticketNotificationSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    //Expires in 180 seconds
+    //Expires in 7 Days
     expireAt: {
         type: Date,
         default: Date.now(),
-        expires: 180
+        expires: 604800
       }
 })
 

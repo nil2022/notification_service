@@ -23,9 +23,7 @@ cron.schedule(process.env.CRON_SCHEDULE, async () => {   //RUNS EVERY specified 
                     <p id="para1" style="margin-top: 5px; margin-bottom: 5px;"><strong>Book My Show</strong></p>
                     <br />
                     <p id="image1">
-                    <a href="https://in.bookmyshow.com/" target="_blank"> 
-                        <img src="https://logodix.com/logo/2011124.jpg" width="150px" height="100%"/>
-                    </a>
+                            <img src="./assets/1422292.jpg" width="300px" height="100%"/>   
                     </p>
                 </div>`
     
