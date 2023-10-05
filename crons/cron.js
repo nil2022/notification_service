@@ -23,7 +23,7 @@ cron.schedule(process.env.CRON_SCHEDULE, async () => {   //RUNS EVERY specified 
                     <p id="para1" style="margin-top: 5px; margin-bottom: 5px;"><strong>Book My Show</strong></p>
                     <br />
                     <p id="image1">
-                            <img src="./assets/1422292.jpg" width="300px" height="100%"/>   
+                            <img src="https://raw.githubusercontent.com/nil2022/notification_service/master/assets/1422292.jpg" width="300px" height="100%"/>   
                     </p>
                 </div>`
     
