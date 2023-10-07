@@ -14,13 +14,14 @@ cron.schedule(process.env.CRON_SCHEDULE, async () => {   //RUNS EVERY specified 
 
                     let mailHtml = `<div>
                     <p>
-                    <b>Hello '<i>${notifications[i].requester}</i>',</b>
+                    <b>Dear '<i>${notifications[i].requester}</i>',</b>
                     </p>
-                    <p>Content is - ${notifications[i].content}</p>
-                    You have registered successfully with CRM Service
+                    <p>${notifications[i].content}</p>
+                    You have registered successfully with CRM Service.
+                    <br/>
                     <br/>
                     Thanks & Regards,
-                    <p id="para1" style="margin-top: 5px; margin-bottom: 5px;"><strong>Book My Show</strong></p>
+                    <p id="para1" style="margin-top: 5px; margin-bottom: 5px;"><strong>CRM Software</strong></p>
                     <br />
                     <p id="image1">
                             <img src="https://raw.githubusercontent.com/nil2022/notification_service/master/assets/1422292.jpg" width="300px" height="100%"/>   
