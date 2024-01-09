@@ -10,6 +10,7 @@ const limiter = rateLimit({
 	keyGenerator: (req) => `${req.protocol}://${req.hostname}${req.originalUrl}`,
 	message: async (req, res) => {
 		console.log(`\n${req.protocol}://${req.hostname}${req.originalUrl} [${req.method}] -> API is Rate-limited`);
+		console.log(`Req remote IP: ${req.ip}`);
 		return res.status(429).json({
 			message: 'Too many requests, please try again later.'
 		});

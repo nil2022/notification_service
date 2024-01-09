@@ -50,6 +50,9 @@ npm run dev
 - `nodemailer`: For sending emails.
 - `dotenv`: For managing environment variables.
 - `user-ip`: For capturing the IP address of users.
+- `helmet`: For setting security headers.
+- `express-rate-limit`: For rate limiting requests.
+- `morgan`: For logging requests.
 
 ## Author
 
