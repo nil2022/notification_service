@@ -3,6 +3,7 @@ require('dotenv').config();
 require('./crons/cron');
 const mongoose = require('mongoose');
 const express = require('express');
+const { limiter } = require('./utils/api-rate-limiter');
 
 const app = express();
 const db_url = process.env.DB_URL;
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 3001;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(limiter); // express-rate-limit middleware
 
 const connectDB = async () => {
 	try {
