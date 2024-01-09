@@ -6,7 +6,7 @@
 //   });
 
 const fetchRemoteIp = (req,res,next) => {
-	console.log(`${req.headers['x-real-ip'] || req.connection.remoteAddress} - ${req.method} - ${req.url}`);
+	console.log(`${req.headers['x-real-ip'].replace(/\n|\r/g, '') || req.connection.remoteAddress}.replace(/\n|\r/g, '') - ${req.method} - ${req.url}`);
 	next();
 };
 
