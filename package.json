@@ -4,7 +4,6 @@
   "description": "the service to send notification to the users of crm app",
   "main": "app.js",
   "scripts": {
-    "build": "npm install express mongoose node-cron nodemailer dotenv express-rate-limit helmet --save",
     "start": "node ./app.js",
     "dev": "nodemon ./app.js"
   },

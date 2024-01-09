@@ -4,8 +4,8 @@ require('./crons/cron');
 const mongoose = require('mongoose');
 const express = require('express');
 const securedHeaders = require('helmet');
-const logger = require('morgan');
 const { limiter } = require('./utils/api-rate-limiter');
+const fetchRemoteIP = require('./utils/fetchRemoteIp');
 
 const app = express();
 const db_url = process.env.DB_URL;
@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3001;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(logger('short'));
+app.use(fetchRemoteIP); // Fetch Remote IP middleware
 app.use(limiter); // express-rate-limit middleware
 app.use(securedHeaders());
 
