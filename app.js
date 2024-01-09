@@ -3,6 +3,7 @@ require('dotenv').config();
 require('./crons/cron');
 const mongoose = require('mongoose');
 const express = require('express');
+const securedHeaders = require('helmet');
 const { limiter } = require('./utils/api-rate-limiter');
 
 const app = express();
@@ -12,6 +13,7 @@ const PORT = process.env.PORT || 3001;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(limiter); // express-rate-limit middleware
+app.use(securedHeaders());
 
 const connectDB = async () => {
 	try {
@@ -23,7 +25,6 @@ const connectDB = async () => {
 		console.timeEnd('Mongodb connection time:');
 		console.log(`MongoDB Connected to Host: ${connect.connection.host}`);
 	} catch (error) {
-		console.timeEnd();
 		console.log('Can\'t connect to DB:', error.message);
 	}
 };
