@@ -6,6 +6,7 @@ const express = require('express');
 const securedHeaders = require('helmet');
 const { limiter } = require('./utils/api-rate-limiter');
 const fetchRemoteIP = require('./utils/fetchRemoteIp');
+const TicketNotificationRoute = require('./routes/ticketNotification.route');
 
 const app = express();
 const db_url = process.env.DB_URL;
@@ -31,6 +32,8 @@ const connectDB = async () => {
 	}
 };
 
+TicketNotificationRoute(app);
+
 // FIRST CONNECT TO MONGODB THEN START LISTENING TO REQUESTS
 connectDB().then(() => {
 	app.listen(PORT, () => {
@@ -38,10 +41,10 @@ connectDB().then(() => {
 	});
 }).catch((e) => console.log(e)); // IF DB CONNECT FAILED, CATCH ERROR
 
-require('./routes/ticketNotification.route')(app);
-
 app.get('/', (req, res) => {
 	// const ip = userIP(req);
 	// console.log("Client Request IP:",ip);
-	res.status(200).send('<h2>Notification Service Running 🚀</h2>');
+	 return res
+	.status(200)
+	.send('<h2>Notification Service Running 🚀</h2>');
 });

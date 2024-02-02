@@ -49,7 +49,7 @@ cron.schedule(process.env.CRON_SCHEDULE, async () => { // RUNS EVERY specified i
 
 							savedNotification.sentStatus = 'SENT';
 
-							await savedNotification.save();
+							await savedNotification.save({ validateBeforeSave: false });
 						}
 					});
 				} catch (error) {
