@@ -7,7 +7,7 @@ const ticketNotificationSchema = new mongoose.Schema({
 	},
 	ticketId: {
 		type: String,
-		required: [true, 'Not provided'],
+		default: Date.now(),
 		ref: 'Ticket',
 	},
 	content: {
@@ -15,7 +15,7 @@ const ticketNotificationSchema = new mongoose.Schema({
 		required: [true, 'Not provided'],
 	},
 	receipientEmails: {
-		type: [String],
+		type: String,
 		required: [true, 'Not provided'],
 	},
 	sentStatus: {
@@ -24,17 +24,7 @@ const ticketNotificationSchema = new mongoose.Schema({
 	},
 	requester: {
 		type: String,
-	},
-	createdAt: {
-		type: Date,
-		immutable: true,
-		default: Date.now(),
-		// expireAfterSeconds: 604800  //expires after 7 days
-	},
-	updatedAt: {
-		type: Date,
-		default: Date.now(),
-	},
-});
+	}
+}, { timestamps: true });
 
 module.exports = mongoose.model('TicketNotification', ticketNotificationSchema);

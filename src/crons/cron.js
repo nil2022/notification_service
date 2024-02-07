@@ -20,19 +20,29 @@ cron.schedule(process.env.CRON_SCHEDULE, async () => { // RUNS EVERY specified i
                     Thanks & Regards,
                     <p id="para1" style="margin-top: 5px; margin-bottom: 5px;"><strong>CRM Software</strong></p>
                     <br />
-                    <p id="image1">
-                            <img src="https://raw.githubusercontent.com/nil2022/notification_service/master/assets/1422292.jpg" width="300px" height="100%"/>   
-                    </p>
+                    	<div style="align-items: center; position: relative;" >
+							<img src="cid:1422292" 
+								width="375px" 
+								height="275px"
+								alt="logoPicture"
+								style="align-items: center; justify-content: center;"
+							/>
+      					</div>
                 </div>`;
 
 			notifications.forEach((notification) => {
 				const mailData = {
 					from: process.env.MAIL_FROM,
-					reply_to: process.env.MAIL_REPLY_TO,
-					to: notifications[i].receipientEmails,
+					replyTo: process.env.MAIL_REPLY_TO,
+					to: [notifications[i].receipientEmails],
 					subject: notification.subject,
-					// text: notification.content,
+					// text: 'Mail Text',
 					html: mailHtml,
+					attachments: [{
+						filename: '1422292.jpg',
+						path: './src/assets/1422292.jpg',
+						cid: '1422292'
+					}],
 				};
 
 				try {
@@ -49,7 +59,7 @@ cron.schedule(process.env.CRON_SCHEDULE, async () => { // RUNS EVERY specified i
 
 							savedNotification.sentStatus = 'SENT';
 
-							await savedNotification.save();
+							await savedNotification.save({ validateBeforeSave: false });
 						}
 					});
 				} catch (error) {
