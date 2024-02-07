@@ -21,7 +21,7 @@ module.exports = {
 	'parserOptions': {
 		'ecmaVersion': 'latest'
 	},
-	ignorePatterns: ['.eslintrc.js'],
+	ignorePatterns: ['.eslintrc.js', 'node_modules/**','src/**'],
 	'rules': {
 		'indent': [
 			'error',
