@@ -12,17 +12,24 @@ const ticketNotificationSchema = new mongoose.Schema({
 	},
 	content: {
 		type: String,
-		required: [true, 'Not provided'],
+		required: true,
 	},
-	receipientEmails: {
+	requesterEmailIds: {
 		type: String,
-		required: [true, 'Not provided'],
+		required: true,
+	},
+	assignedToEmailIds: {
+		type: String,
+		required: true,
 	},
 	sentStatus: {
 		type: String,
 		default: 'UN_SENT',
 	},
 	requester: {
+		type: String,
+	},
+	assignedTo: {
 		type: String,
 	}
 }, { timestamps: true });

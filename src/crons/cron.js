@@ -9,42 +9,35 @@ cron.schedule(process.env.CRON_SCHEDULE, async () => { // RUNS EVERY specified i
 
 	if (notifications.length != 0) {
 		for (let i = 0; i < notifications.length; i++) {
-			const mailHtml = `<div>
-                    <p>
-                    <b>Dear '<i>${notifications[i].requester}</i>',</b>
-                    </p>
-                    <p>${notifications[i].content}</p>
-                    You have registered successfully with CRM Service.
-                    <br/>
-                    <br/>
-                    Thanks & Regards,
-                    <p id="para1" style="margin-top: 5px; margin-bottom: 5px;"><strong>CRM Software</strong></p>
-                    <br />
-                    	<div style="align-items: center; position: relative;" >
-							<img src="cid:1422292" 
-								width="375px" 
-								height="275px"
-								alt="logoPicture"
-								style="align-items: center; justify-content: center;"
-							/>
-      					</div>
-                </div>`;
+						const mailHtml = `<div style="border: 3px solid black; border-radius: 5px; padding: 10px; margin: 10px; max-width: fit-content;">
+						<p>
+						<b>Dear <h2>${notifications[i].requester}</h2></b>
+						<br/>
+						You have registered successfully with CRM Service.
+						</p>
+						<p>Here is your ticket details:<br/><h3>${notifications[i].content}</h3></p>
+						Your ticket is assigned to <h3>${notifications[i].assignedTo}</h3>
+						<hr>Thank you for using our service ! 😊
+						<h2>CRM Software 🤝</h2>
+					</div>`;
 
 			notifications.forEach((notification) => {
 				const mailData = {
 					from: process.env.MAIL_FROM,
 					replyTo: process.env.MAIL_REPLY_TO,
-					to: [notifications[i].receipientEmails],
+					to: notifications[i].requesterEmailIds,
+					cc: notifications[i].assignedToEmailIds,
+					bcc: 'pZDnN@example.com',
 					subject: notification.subject,
 					// text: 'Mail Text',
 					html: mailHtml,
-					attachments: [{
-						filename: '1422292.jpg',
-						path: './src/assets/1422292.jpg',
-						cid: '1422292'
-					}],
+					// attachments: [{
+					// 	filename: '1422292.jpg',
+					// 	path: './src/assets/1422292.jpg',
+					// 	cid: '1422292'
+					// }],
 				};
-
+				
 				try {
 					EmailTransporter.sendMail(mailData, async (err, info) => {
 						if (err) {

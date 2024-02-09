@@ -7,8 +7,10 @@ exports.acceptNotificationRequest = async (req, res) => {
 	const notificationObject = {
 		subject: req.body.subject,
 		content: req.body.content,
-		receipientEmails: req.body.receipientEmails,
+		requesterEmailIds: req.body.requesterEmailIds,
+		assignedToEmailIds: req.body.assignedToEmailIds,
 		requester: req.body.requester,
+		assignedTo: req.body.assignedTo,
 		ticketId: req.body.ticketId,
 	};
 	try {
