@@ -17,7 +17,7 @@
     "mongoose": "^8.2.2",
     "morgan": "^1.10.0",
     "node-cron": "^3.0.3",
-    "nodemailer": "^6.9.12"
+    "nodemailer": "^6.9.13"
   },
   "devDependencies": {
     "eslint": "^8.57.0",
