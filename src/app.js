@@ -9,8 +9,8 @@ const fetchRemoteIP = require("./utils/fetchRemoteIp");
 const TicketNotificationRoute = require("./routes/ticketNotification.route");
 const app = express();
 
-app.use(express.urlencoded({ extended: true, limit: '16kb' }));
-app.use(express.json({ limit: '16kb'}));
+app.use(express.urlencoded({ extended: true, limit: "16kb" }));
+app.use(express.json({ limit: "16kb" }));
 app.use(fetchRemoteIP); // Fetch Remote IP middleware
 app.use(limiter); // express-rate-limit middleware
 app.use(securedHeaders());
