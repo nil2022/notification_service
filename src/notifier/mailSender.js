@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import logger from '../utils/pinoLogger.js';
 
 const mailSender = async (requesterEmailId, assignedToEmailId, bccMailId, title, body) => {
     try {
@@ -21,16 +22,18 @@ const mailSender = async (requesterEmailId, assignedToEmailId, bccMailId, title,
             subject: `${title}`,
             html: `${body}`
         });
-        console.log('Email Sent Successfully: ', {
+        logger.info({
             Accepted: info.accepted,
             MessageID: info.messageId,
             Response: [info.response]
-        });
+        }, 'Email Sent Successfully: ' )
+        
         return info;
 
     } 
     catch (error) {
-        console.log('Mail Error:', error.name, error.message)
+        logger.error(error, 'Email Sent Failed: ' )
+        throw error;
     }
 };
 

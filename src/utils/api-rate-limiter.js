@@ -1,4 +1,5 @@
 import { rateLimit } from 'express-rate-limit';
+import logger from './pinoLogger.js';
 
 const limiter = rateLimit({
     windowMs: process.env.RATE_LIMIT_TIME * 60 * 1000 || 15 * 60 * 1000, // default is 15 minutes
@@ -9,12 +10,11 @@ const limiter = rateLimit({
     keyGenerator: (req) =>
         `${req.protocol}://${req.hostname}${req.originalUrl}`,
     message: async (req, res) => {
-        console.log(
-            `\n${req.protocol}://${req.hostname}${req.originalUrl} [${req.method}] -> API is Rate-limited`
-        );
-        console.log(`Req remote IP: ${req.ip}`);
+        logger.warn(`\n${req.protocol}://${req.headers['host']} [${req.method}] -> API is Rate-limited`)
         return res.status(429).json({
-            message: 'Too many requests, please try again later.'
+            message: 'Too many requests, please try again later.',
+            statusCode: 429,
+            success: false
         });
     }
 });
