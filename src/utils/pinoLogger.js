@@ -23,7 +23,7 @@ const allTransport = pino.transport({
 
 export default pino(
 	{
-		level: process.env.PINO_LOG_LEVEL || 'info',
+		level: 'info',
         timestamp: pino.stdTimeFunctions.isoTime,
         // redact: {
         //     paths: ['password'],
