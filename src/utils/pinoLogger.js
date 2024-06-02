@@ -31,5 +31,5 @@ export default pino(
         //     remove: true
         // },
 	},
-    allTransport
+    // allTransport
 );
