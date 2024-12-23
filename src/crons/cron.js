@@ -7,8 +7,9 @@ import logger from '../utils/pinoLogger.js';
 
 /**
  * * This is a cron job that runs every specified interval
+ * * default is set to run at midnight of every first day of the month
  */
-cron.schedule(process.env.CRON_SCHEDULE, async () => {
+cron.schedule(process.env.CRON_SCHEDULE || "0 0 1 * *", async () => {
 	// RUNS EVERY specified interval set in ".env"
 	const notifications = await TicketNotification.find({
 		sentStatus: ticketSentStatus.un_sent
