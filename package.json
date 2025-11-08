@@ -1,52 +1,55 @@
 {
-    "name": "notification-service",
-    "version": "1.0.1",
-    "description": "This is a service to send email notification to the users of crm app",
-    "type": "module",
-    "main": "app.js",
-    "scripts": {
-        "start": "node -r dotenv/config src/app.js",
-        "dev": "nodemon -r dotenv/config src/app.js"
-    },
-    "author": "Nilanjan Haldar",
-    "license": "ISC",
-    "dependencies": {   
-        "helmet": "^8.0.0",
-        "dotenv": "^16.4.7",
-        "express": "^4.21.2",
-        "express-rate-limit": "^7.5.0",
-        "mongoose": "^8.9.2",
-        "morgan": "^1.10.0",
-        "node-cron": "^3.0.3",
-        "nodemailer": "^6.9.16",
-        "path": "^0.12.7",
-        "pino": "^9.5.0",
-        "pino-http": "^10.3.0",
-        "pino-pretty": "^13.0.0",
-        "winston": "^3.17.0"
-    },
-    "devDependencies": {
-        "nodemon": "^3.1.9",
-        "prettier": "^3.4.2"
-    },
-    "engines": {
-        "node": ">=20.18.1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/nil2022/notification_service.git"
-    },
-    "keywords": [
-        "express",
-        "mongoose",
-        "node-cron",
-        "nodemailer",
-        "nodemon",
-        "dotenv",
-        "winston"
-    ],
-    "bugs": {
-        "url": "https://github.com/nil2022/notification_service/issues"
-    },
-    "homepage": "https://github.com/nil2022/notification_service#readme"
+	"name": "notification-service",
+	"version": "1.0.1",
+	"description": "This is a service to send email notification to the users of crm app",
+	"type": "module",
+	"main": "app.js",
+	"scripts": {
+		"start": "node src/app.js",
+		"dev": "nodemon src/app.js"
+	},
+	"author": "Nilanjan Haldar",
+	"license": "ISC",
+	"dependencies": {
+		"chalk": "^5.6.2",
+		"dotenv": "^16.6.1",
+		"envalid": "^8.1.1",
+		"express": "^4.21.2",
+		"express-rate-limit": "^7.5.0",
+		"helmet": "^8.0.0",
+		"mongoose": "^8.9.2",
+		"morgan": "^1.10.0",
+		"node-cron": "^3.0.3",
+		"nodemailer": "^6.9.16",
+		"path": "^0.12.7",
+		"pino": "^9.5.0",
+		"pino-http": "^10.3.0",
+		"pino-pretty": "^13.0.0",
+		"url": "^0.11.4",
+		"winston": "^3.17.0"
+	},
+	"devDependencies": {
+		"nodemon": "^3.1.9",
+		"prettier": "^3.4.2"
+	},
+	"engines": {
+		"node": ">=20.18.1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/nil2022/notification_service.git"
+	},
+	"keywords": [
+		"express",
+		"mongoose",
+		"node-cron",
+		"nodemailer",
+		"nodemon",
+		"dotenv",
+		"winston"
+	],
+	"bugs": {
+		"url": "https://github.com/nil2022/notification_service/issues"
+	},
+	"homepage": "https://github.com/nil2022/notification_service#readme"
 }
