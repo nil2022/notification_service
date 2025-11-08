@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import logger from '../utils/pinoLogger.js';
+import env from '../configs/env.config.js';
 
 const mailSender = async (requesterEmailId, assignedToEmailId, bccMailId, title, body) => {
     try {
