@@ -4,12 +4,13 @@ import mailSender from '../notifier/mailSender.js';
 import { ticketSentStatus } from '../utils/constants.js';
 import { ticketCreated } from '../mail/templates/ticketCreated.js';
 import logger from '../utils/pinoLogger.js';
+import env from '../configs/env.config.js';
 
 /**
  * * This is a cron job that runs every specified interval
  * * default is set to run at midnight of every first day of the month
  */
-cron.schedule(process.env.CRON_SCHEDULE || "0 0 1 * *", async () => {
+cron.schedule(env.CRON_SCHEDULE || "0 0 1 * *", async () => {
 	// RUNS EVERY specified interval set in ".env"
 	const notifications = await TicketNotification.find({
 		sentStatus: ticketSentStatus.un_sent

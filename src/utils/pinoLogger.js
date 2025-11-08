@@ -1,4 +1,5 @@
 import pino from 'pino';
+import env from '../configs/env.config.js';
 
 const allTransport = pino.transport({
 	targets: [
@@ -7,11 +8,11 @@ const allTransport = pino.transport({
 		// 	options: { 
         //         destination: `./logs/notification-service.log`, 
         //     },
-        //     level: process.env.PINO_LOG_LEVEL || 'info',
+        //     level: env.PINO_LOG_LEVEL || 'info',
 		// },
         {
             target: 'pino-pretty',
-            level: process.env.PINO_LOG_LEVEL || 'info',
+            level: env.PINO_LOG_LEVEL || 'info',
             options: {
                 colorize: true,
                 translateTime: 'SYS:standard',
@@ -23,7 +24,7 @@ const allTransport = pino.transport({
 
 export default pino(
 	{
-		level: process.env.PINO_LOG_LEVEL || 'info',
+		level: env.PINO_LOG_LEVEL || 'info',
         timestamp: pino.stdTimeFunctions.isoTime,
         // redact: {
         //     paths: ['password'],

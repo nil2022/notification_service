@@ -7,7 +7,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const envPath = path.resolve(__dirname, '../', '../', '.env');
-console.log('envPath: ', envPath);
 dotenv.config({ path: envPath });
 
 const envVariables = process.env;
@@ -24,8 +23,8 @@ const env = cleanEnv(envVariables, {
 	DB_URL: str(),
 
 	// ----------CRON-SCHEDULE------------
-	CRON_SCHEDULE: str({ default: '*/5 * * * *' }), // Every 5 minutes
-
+	CRON_SCHEDULE: str(),
+	
 	// BREVO EMAIL CREDENTIALS
 	MAIL_HOST: str(),
 	MAIL_PORT: num(),
@@ -38,7 +37,9 @@ const env = cleanEnv(envVariables, {
 	//  SPECIFY EXPRESS-RATE-LIMIT TIME IN MINUTES
 	RATE_LIMIT_TIME: num(),
 	//  SPECIFY MAXIMUM NO. OF REQUESTS PER IP ADDRESS
-	MAX_REQUESTS: num()
+	MAX_REQUESTS: num(),
+
+	PINO_LOG_LEVEL: str()
 });
 
 export default env;
