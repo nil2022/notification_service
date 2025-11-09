@@ -1,4 +1,4 @@
-import { str, num, cleanEnv, port } from 'envalid';
+import { str, num, cleanEnv, port, bool } from 'envalid';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -28,6 +28,7 @@ const env = cleanEnv(envVariables, {
 	// BREVO EMAIL CREDENTIALS
 	MAIL_HOST: str(),
 	MAIL_PORT: num(),
+	MAIL_AUTH_SECURE: bool(),
 	MAIL_USERNAME: str(),
 	MAIL_PASSWORD: str(),
 	MAIL_FROM: str(),

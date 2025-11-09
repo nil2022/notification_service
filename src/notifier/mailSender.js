@@ -7,7 +7,7 @@ const mailSender = async (requesterEmailId, assignedToEmailId, bccMailId, title,
         let transporter = nodemailer.createTransport({
             host: env.MAIL_HOST,
             port: env.MAIL_PORT,
-            secure: false,
+            secure: env.MAIL_AUTH_SECURE, // true for 465, false for other ports
             auth: {
                 user: env.MAIL_USERNAME,
                 pass: env.MAIL_PASSWORD
