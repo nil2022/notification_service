@@ -24,7 +24,7 @@ const env = cleanEnv(envVariables, {
 
 	// ----------CRON-SCHEDULE------------
 	CRON_SCHEDULE: str(),
-	
+
 	// BREVO EMAIL CREDENTIALS
 	MAIL_HOST: str(),
 	MAIL_PORT: num(),
@@ -40,7 +40,10 @@ const env = cleanEnv(envVariables, {
 	//  SPECIFY MAXIMUM NO. OF REQUESTS PER IP ADDRESS
 	MAX_REQUESTS: num(),
 
-	PINO_LOG_LEVEL: str()
+	PINO_LOG_LEVEL: str({
+		choices: ['fatal', 'error', 'warn', 'info', 'debug', 'trace'],
+		default: 'info'
+	})
 });
 
 export default env;
