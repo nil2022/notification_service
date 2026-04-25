@@ -8,9 +8,8 @@ import env from '../configs/env.config.js';
 
 /**
  * * This is a cron job that runs every specified interval
- * * default is set to run at midnight of every first day of the month
  */
-cron.schedule(env.CRON_SCHEDULE || "0 0 1 * *", async () => {
+cron.schedule(env.CRON_SCHEDULE, async () => {
 	// RUNS EVERY specified interval set in ".env"
 	const notifications = await TicketNotification.find({
 		sentStatus: ticketSentStatus.un_sent

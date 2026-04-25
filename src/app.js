@@ -11,19 +11,9 @@ import env from './configs/env.config.js';
 
 const app = express();
 
-/************************************************** */
-// logger.fatal('fatal');
-// logger.error('error');
-// logger.warn('warn');
-// logger.info('info');
-// logger.debug('debug');
-// logger.trace('trace');
-
-/** ***************************************************** */
-
 app.use(express.urlencoded({ extended: true, limit: '16kb' }));
 app.use(express.json({ limit: '16kb' }));
-app.use(limiter); // express-rate-limit middleware
+app.use(limiter);
 app.use(securedHeaders());
 app.use(pinoHTTP({ logger }));
 
@@ -31,7 +21,6 @@ const connectDB = async () => {
 	const startTime = Date.now();
 	const connect = await mongoose.connect(env.DB_URL);
 	logger.info(`Time taken to connect to DB: ${Date.now() - startTime}ms`);
-	// logger.info(`MongoDB Connected to Host: ${connect.connection.host}`);
 	const { host, name: dbName } = connect.connection;
 	console.log(
 		chalk.bgGreen.black(

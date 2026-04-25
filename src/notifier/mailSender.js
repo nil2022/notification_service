@@ -15,8 +15,8 @@ const mailSender = async (requesterEmailId, assignedToEmailId, bccMailId, title,
         });
 
         let info = await transporter.sendMail({
-            from: `CRM Software || Happy to Help 😊 <${env.MAIL_FROM}>`,
-            replyTo: `CRM Support || Happy to Help 😊 <${env.MAIL_REPLY_TO}>`,
+            from: `CRM Software <${env.MAIL_FROM}>`,
+            replyTo: `CRM Support <${env.MAIL_REPLY_TO}>`,
             to: `${requesterEmailId}`,
             cc: `${assignedToEmailId}`,
             bcc: bccMailId ? bccMailId : null,
