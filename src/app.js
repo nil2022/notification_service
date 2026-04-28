@@ -3,11 +3,11 @@ import mongoose from 'mongoose';
 import express from 'express';
 import securedHeaders from 'helmet';
 import limiter from './utils/api-rate-limiter.js';
-import logger from './utils/pinoLogger.js';
-import pinoHTTP from 'pino-http';
+import { httpLogger } from './middlewares/httpLogger.js';
 import chalk from 'chalk';
 import notificationRouter from './routes/ticketNotification.route.js';
 import env from './configs/env.config.js';
+import logger from './utils/pinoLogger.js';
 
 const app = express();
 
@@ -15,7 +15,8 @@ app.use(express.urlencoded({ extended: true, limit: '16kb' }));
 app.use(express.json({ limit: '16kb' }));
 app.use(limiter);
 app.use(securedHeaders());
-app.use(pinoHTTP({ logger }));
+app.use(httpLogger);
+app.set('trust proxy', true);
 
 const connectDB = async () => {
 	const startTime = Date.now();
