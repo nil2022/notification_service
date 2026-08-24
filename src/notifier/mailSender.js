@@ -1,21 +1,22 @@
 import nodemailer from 'nodemailer';
 import logger from '../utils/pinoLogger.js';
+import env from '../configs/env.config.js';
 
 const mailSender = async (requesterEmailId, assignedToEmailId, bccMailId, title, body) => {
     try {
         let transporter = nodemailer.createTransport({
-            host: process.env.MAIL_HOST,
-            port: process.env.MAIL_PORT,
-            secure: false,
+            host: env.MAIL_HOST,
+            port: env.MAIL_PORT,
+            secure: env.MAIL_AUTH_SECURE, // true for 465, false for other ports
             auth: {
-                user: process.env.MAIL_USERNAME,
-                pass: process.env.MAIL_PASSWORD
+                user: env.MAIL_USERNAME,
+                pass: env.MAIL_PASSWORD
             }
         });
 
         let info = await transporter.sendMail({
-            from: `CRM Software || Happy to Help 😊 <${process.env.MAIL_FROM}>`,
-            replyTo: `CRM Support || Happy to Help 😊 <${process.env.MAIL_REPLY_TO}>`,
+            from: `CRM Software <${env.MAIL_FROM}>`,
+            replyTo: `CRM Support <${env.MAIL_REPLY_TO}>`,
             to: `${requesterEmailId}`,
             cc: `${assignedToEmailId}`,
             bcc: bccMailId ? bccMailId : null,
