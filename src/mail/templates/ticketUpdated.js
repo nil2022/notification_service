@@ -1,11 +1,13 @@
+import { escapeHtml } from '../../utils/escapeHtml.js';
+
 // export const ticketUpdated = (notification) => {
 //     return `
 //     <div style="border: 3px solid black; border-radius: 5px; padding: 10px; margin: 10px; max-width: fit-content;">
 //         <p>
-//         <b>Dear <h2>${notification.requester}</h2></b>
+//         <b>Dear <h2>${escapeHtml(notification.requester)}</h2></b>
 //         Your ticket has been updated.
 //         </p>
-//         <p>Here is your ticket details:<br/><h3>${notification.content}</h3></p>
+//         <p>Here is your ticket details:<br/><h3>${escapeHtml(notification.content)}</h3></p>
 //         <hr>Thank you for using our service ! 😊
 //         <h2>CRM Software 🤝</h2>
 //     </div>
@@ -79,14 +81,14 @@ export const ticketUpdated = (notification) => {
             </div>
             <div class="email-content">
                 <p>
-                    <strong>Dear <span class="highlight">${notification.requester}</span>,</strong>
+                    <strong>Dear <span class="highlight">${escapeHtml(notification.requester)}</span>,</strong>
                 </p>
                 <p>
                     Your ticket has been successfully updated. ✨
                 </p>
                 <p>
                     <strong>Updated ticket details:</strong>
-                    <h3>${notification.content}</h3>
+                    <h3>${escapeHtml(notification.content)}</h3>
                 </p>
                 <hr>
                 <p>

@@ -10,40 +10,41 @@ import env from '../configs/env.config.js';
  * * This is a cron job that runs every specified interval
  */
 cron.schedule(env.CRON_SCHEDULE, async () => {
-	// RUNS EVERY specified interval set in ".env"
-	const notifications = await TicketNotification.find({
-		sentStatus: ticketSentStatus.un_sent
-	});
+	try {
+		// RUNS EVERY specified interval set in ".env"
+		const notifications = await TicketNotification.find({
+			sentStatus: ticketSentStatus.un_sent
+		});
 
-	logger.info(`Count of Unsent notification: ${notifications.length}`);
+		logger.info(`Count of Unsent notification: ${notifications.length}`);
 
-	if (notifications.length != 0) {
-		for (let i = 0; i < notifications.length; i++) {
+		// One mail per notification (previously nested loop sent each mail N times)
+		await Promise.allSettled(
 			notifications.map(async (notification) => {
-				await mailSender(
-					notification.requesterEmailIds,
-					notification.assignedToEmailIds,
-					null,
-					notification.subject,
-					ticketCreated(notification)
-				)
-					.then(async (response) => {
-						logger.debug(response);
+				try {
+					const response = await mailSender(
+						notification.requesterEmailIds,
+						notification.assignedToEmailIds,
+						null,
+						notification.subject,
+						ticketCreated(notification)
+					);
+					logger.debug(response);
 
-						const savedNotification =
-							await TicketNotification.findOneAndUpdate(
-								{ _id: notification._id },
-								{
-									sentStatus: ticketSentStatus.sent
-								},
-								{ new: true }
-							);
-						logger.info('Ticket Created! :: ', savedNotification);
-					})
-					.catch((error) => {
-						logger.error(error, 'Got Error ::');
-					});
-			});
-		}
+					await TicketNotification.findOneAndUpdate(
+						{ _id: notification._id },
+						{ sentStatus: ticketSentStatus.sent }
+					);
+					logger.info(
+						{ ticketId: notification.ticketId },
+						'Ticket notification sent'
+					);
+				} catch (error) {
+					logger.error(error, 'Got Error ::');
+				}
+			})
+		);
+	} catch (error) {
+		logger.error(error, 'Notification cron failed ::');
 	}
 });

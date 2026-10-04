@@ -15,6 +15,21 @@ jest.mock('../../utils/pinoLogger.js', () => ({
 	}
 }));
 
+// Mimics mongoose's chainable query: find().sort().skip().limit() -> awaitable
+const mockQuery = (result) => {
+	const query = Promise.resolve(result);
+	query.catch(() => {});
+	query.sort = jest.fn().mockReturnValue(query);
+	query.skip = jest.fn().mockReturnValue(query);
+	query.limit = jest.fn().mockReturnValue(query);
+	return query;
+};
+
+const mockRes = () => ({
+	status: jest.fn().mockReturnThis(),
+	json: jest.fn()
+});
+
 describe('Ticket Notification Controller - Integration Tests', () => {
 	describe('acceptNotificationRequest', () => {
 		it('should create and persist notification to database', async () => {
@@ -66,6 +81,44 @@ describe('Ticket Notification Controller - Integration Tests', () => {
 		});
 	});
 
+	describe('acceptNotificationRequest validation', () => {
+		const valid = {
+			subject: 'Subj',
+			content: 'Body',
+			ticketId: 'TKT-1',
+			requesterEmailIds: 'a@example.com',
+			assignedToEmailIds: 'b@example.com, c@example.com'
+		};
+
+		it.each([
+			['missing body', undefined],
+			['object subject', { ...valid, subject: { $gt: '' } }],
+			['oversized content', { ...valid, content: 'x'.repeat(5001) }],
+			['invalid email', { ...valid, requesterEmailIds: 'not-an-email' }],
+			['email header injection', { ...valid, requesterEmailIds: 'a@example.com\r\nBcc: evil@example.com' }],
+			['too many recipients', { ...valid, assignedToEmailIds: Array(11).fill('a@example.com').join(',') }]
+		])('should return 400 for %s', async (_name, body) => {
+			TicketNotification.create.mockClear();
+			const res = mockRes();
+
+			await acceptNotificationRequest({ body }, res);
+
+			expect(res.status).toHaveBeenCalledWith(400);
+			expect(TicketNotification.create).not.toHaveBeenCalled();
+		});
+
+		it('should not let clients set internal fields such as sentStatus', async () => {
+			TicketNotification.create.mockResolvedValue({ ticketId: 'TKT-1' });
+
+			await acceptNotificationRequest(
+				{ body: { ...valid, sentStatus: 'SENT' } },
+				mockRes()
+			);
+
+			expect(TicketNotification.create.mock.calls.at(-1)[0]).not.toHaveProperty('sentStatus');
+		});
+	});
+
 	describe('getNotificationById', () => {
 		it('should retrieve notification by ticket ID', async () => {
 			const mockNotif = {
@@ -89,7 +142,27 @@ describe('Ticket Notification Controller - Integration Tests', () => {
 			expect(res.status).toHaveBeenCalledWith(200);
 		});
 
-		it('should handle notification not found', async () => {
+		it('should return 404 when notification does not exist', async () => {
+			TicketNotification.findOne.mockResolvedValue(null);
+
+			const res = mockRes();
+			await getNotificationById({ query: { id: 'TKT-404' } }, res);
+
+			expect(res.status).toHaveBeenCalledWith(404);
+		});
+
+		it('should reject non-string ids (NoSQL injection / array params)', async () => {
+			TicketNotification.findOne.mockClear();
+
+			for (const id of [{ $ne: '' }, ['a', 'b'], undefined, '']) {
+				const res = mockRes();
+				await getNotificationById({ query: { id } }, res);
+				expect(res.status).toHaveBeenCalledWith(400);
+			}
+			expect(TicketNotification.findOne).not.toHaveBeenCalled();
+		});
+
+		it('should handle database errors', async () => {
 			TicketNotification.findOne.mockRejectedValue(new Error('Not found'));
 
 			const req = { query: { id: 'TKT-999' } };
@@ -111,7 +184,7 @@ describe('Ticket Notification Controller - Integration Tests', () => {
 				{ _id: '2', ticketId: 'TKT-002', subject: 'Alert 2' }
 			];
 
-			TicketNotification.find.mockResolvedValue(mockNotifications);
+			TicketNotification.find.mockReturnValue(mockQuery(mockNotifications));
 
 			const req = {};
 			const res = {
@@ -126,7 +199,9 @@ describe('Ticket Notification Controller - Integration Tests', () => {
 		});
 
 		it('should handle database errors gracefully', async () => {
-			TicketNotification.find.mockRejectedValue(new Error('Database error'));
+			TicketNotification.find.mockReturnValue(
+				mockQuery(Promise.reject(new Error('Database error')))
+			);
 
 			const req = {};
 			const res = {

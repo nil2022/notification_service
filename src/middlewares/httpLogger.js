@@ -5,16 +5,14 @@ export const httpLogger = pinoHttp({
 	logger,
 	serializers: {
 		req(req) {
-			const ip =
-				req.headers['x-forwarded-for']?.split(',')[0] ||
-				req.ip ||
-				req.socket?.remoteAddress ||
-				'unknown';
+			// req.ip honours the configured `trust proxy` setting, so a client
+			// can't forge the logged address through X-Forwarded-For
+			const ip = req.ip || req.socket?.remoteAddress || 'unknown';
 
 			return {
 				method: req.method,
 				url: req.url,
-				ip // now guaranteed
+				ip
 			};
 		},
 		res(res) {

@@ -9,14 +9,18 @@ import notificationRouter from './routes/ticketNotification.route.js';
 import env from './configs/env.config.js';
 import logger from './utils/pinoLogger.js';
 
+// Strip Mongo operators ($ne, $gt...) from any filter built from user input
+mongoose.set('sanitizeFilter', true);
+
 const app = express();
 
-app.use(express.urlencoded({ extended: true, limit: '16kb' }));
-app.use(express.json({ limit: '16kb' }));
-app.use(limiter);
+// Only trust a known number of proxy hops; `true` lets clients spoof their IP via X-Forwarded-For
+app.set('trust proxy', env.TRUST_PROXY);
 app.use(securedHeaders());
+app.use(limiter);
 app.use(httpLogger);
-app.set('trust proxy', true);
+app.use(express.urlencoded({ extended: false, limit: '16kb' }));
+app.use(express.json({ limit: '16kb' }));
 
 const connectDB = async () => {
 	const startTime = Date.now();
@@ -32,6 +36,35 @@ const connectDB = async () => {
 
 app.use('/api/v1/notify', notificationRouter);
 
+app.get('/', (_, res) => {
+	logger.info('Notification Service is up and Running !');
+	return res.status(200).json({
+		message: 'Notification Service is up and Running 👍🏻',
+		statusCode: 200,
+		success: true
+	});
+});
+
+app.use((_, res) =>
+	res.status(404).json({
+		message: 'Not Found',
+		statusCode: 404,
+		success: false
+	})
+);
+
+// Never leak stack traces / internals to clients (also covers malformed JSON bodies)
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, _next) => {
+	const status = err.status >= 400 && err.status < 500 ? err.status : 500;
+	if (status === 500) logger.error(err, 'Unhandled error');
+	res.status(status).json({
+		message: status === 500 ? 'Internal Server Error!' : 'Bad Request',
+		statusCode: status,
+		success: false
+	});
+});
+
 // FIRST CONNECT TO MONGODB THEN START LISTENING TO REQUESTS
 connectDB()
 	.then(() => {
@@ -42,12 +75,3 @@ connectDB()
 		});
 	})
 	.catch((err) => logger.error(err, "Can't connect to DB:")); // IF DB CONNECT FAILED, CATCH ERROR
-
-app.get('/', (_, res) => {
-	logger.info('Notification Service is up and Running !');
-	return res.status(200).json({
-		message: 'Notification Service is up and Running 👍🏻',
-		statusCode: 200,
-		success: true
-	});
-});

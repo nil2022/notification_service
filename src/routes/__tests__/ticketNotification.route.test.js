@@ -6,8 +6,11 @@ import * as controller from '../../controllers/ticketNotification.controller.js'
 jest.mock('../../controllers/ticketNotification.controller.js');
 jest.mock('../../utils/pinoLogger.js');
 jest.mock('../../configs/env.config.js', () => ({
-	default: {}
+	__esModule: true,
+	default: { API_KEY: 'k'.repeat(32) }
 }));
+
+const API_KEY = 'k'.repeat(32);
 
 describe('Ticket Notification Routes', () => {
 	let app;
@@ -35,6 +38,7 @@ describe('Ticket Notification Routes', () => {
 
 			const response = await request(app)
 				.post('/api/create-notification')
+				.set('x-api-key', API_KEY)
 				.send(payload);
 
 			expect(response.status).toBe(200);
@@ -50,6 +54,7 @@ describe('Ticket Notification Routes', () => {
 
 			const response = await request(app)
 				.get('/api/fetch-notification')
+				.set('x-api-key', API_KEY)
 				.query({ id: 'TICKET-001' });
 
 			expect(response.status).toBe(200);
@@ -64,10 +69,27 @@ describe('Ticket Notification Routes', () => {
 			});
 
 			const response = await request(app)
-				.get('/api/notifications');
+				.get('/api/notifications')
+				.set('x-api-key', API_KEY);
 
 			expect(response.status).toBe(200);
 			expect(controller.getAllNotifications).toHaveBeenCalled();
+		});
+	});
+
+	describe('authentication', () => {
+		it.each([
+			['no key', undefined],
+			['wrong key', 'wrong'],
+			['key of different length', 'k'.repeat(40)]
+		])('should return 401 with %s', async (_name, key) => {
+			const req = request(app).get('/api/notifications');
+			if (key) req.set('x-api-key', key);
+
+			const response = await req;
+
+			expect(response.status).toBe(401);
+			expect(controller.getAllNotifications).not.toHaveBeenCalled();
 		});
 	});
 });

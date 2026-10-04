@@ -19,6 +19,12 @@ const env = cleanEnv(envVariables, {
 		default: 'development'
 	}),
 
+	// Number of reverse-proxy hops to trust for X-Forwarded-* headers (0 = none)
+	TRUST_PROXY: num({ default: 1 }),
+
+	// Shared secret that CRM clients must send in the `x-api-key` header
+	API_KEY: str({ desc: 'Minimum 32 characters' }),
+
 	// ----------MongoDB URL---------
 	DB_URL: str(),
 
@@ -45,5 +51,9 @@ const env = cleanEnv(envVariables, {
 		default: 'info'
 	})
 });
+
+if (env.API_KEY.length < 32) {
+	throw new Error('API_KEY must be at least 32 characters long');
+}
 
 export default env;
