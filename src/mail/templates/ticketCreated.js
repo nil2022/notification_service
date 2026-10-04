@@ -1,3 +1,5 @@
+import { escapeHtml } from '../../utils/escapeHtml.js';
+
 // export const ticketCreated = (notification) => {
 //     return `
 //     <html lang="en">
@@ -12,11 +14,11 @@
 //     <body>
 //     <div style="border: 3px solid black; border-radius: 5px; padding: 10px; margin: 10px; max-width: fit-content;">
 //         <p>
-//         <b>Dear <h2>${notification.requester}</h2></b>
+//         <b>Dear <h2>${escapeHtml(notification.requester)}</h2></b>
 //         You have registered successfully with CRM Service.
 //         </p>
-//         <p>Here is your ticket details:<br/><h3>${notification.content}</h3></p>
-//         Your ticket is assigned to <h3>${notification.assignedTo}</h3>
+//         <p>Here is your ticket details:<br/><h3>${escapeHtml(notification.content)}</h3></p>
+//         Your ticket is assigned to <h3>${escapeHtml(notification.assignedTo)}</h3>
 //         <hr>Thank you for using our service ! 😊
 //         <h2>CRM Software 🤝</h2>
 //     </div>
@@ -93,18 +95,18 @@ export const ticketCreated = (notification) => {
             </div>
             <div class="email-content">
                 <p>
-                    <strong>Dear <span class="highlight">${notification.requester}</span>,</strong>
+                    <strong>Dear <span class="highlight">${escapeHtml(notification.requester)}</span>,</strong>
                 </p>
                 <p>
                     You have successfully registered with our CRM Service. 🎉
                 </p>
                 <p>
                     <strong>Your ticket details:</strong>
-                    <h3>${notification.content}</h3>
+                    <h3>${escapeHtml(notification.content)}</h3>
                 </p>
                 <p>
                     Your ticket has been assigned to: 
-                    <h3 class="highlight">${notification.assignedTo}</h3>
+                    <h3 class="highlight">${escapeHtml(notification.assignedTo)}</h3>
                 </p>
                 <hr>
                 <p>
