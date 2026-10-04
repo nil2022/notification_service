@@ -1,24 +1,25 @@
 import crypto from 'crypto';
 import env from '../configs/env.config.js';
 
-// Per-process random key: the HMAC is only used to get fixed-length digests for
-// timingSafeEqual, never to store or derive anything from the API key.
-const HMAC_KEY = crypto.randomBytes(32);
-const digest = (value) =>
-	crypto.createHmac('sha256', HMAC_KEY).update(value).digest();
-
 /**
  * Rejects requests that do not carry the shared secret in `x-api-key`.
- * Both sides are HMAC'd first so timingSafeEqual always gets equal-length input.
+ * The key is compared directly in constant time (no hashing needed: it is a
+ * high-entropy random secret, not a user password). Only its length can leak,
+ * which does not help an attacker guess a random key.
  */
 export const apiKeyAuth = (req, res, next) => {
 	const provided = req.get('x-api-key');
 
-	if (
-		typeof provided === 'string' &&
-		crypto.timingSafeEqual(digest(provided), digest(env.API_KEY))
-	) {
-		return next();
+	if (typeof provided === 'string') {
+		const providedBuf = Buffer.from(provided);
+		const expectedBuf = Buffer.from(env.API_KEY);
+
+		if (
+			providedBuf.length === expectedBuf.length &&
+			crypto.timingSafeEqual(providedBuf, expectedBuf)
+		) {
+			return next();
+		}
 	}
 
 	return res.status(401).json({
